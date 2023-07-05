@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Create Category";
+}
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2"><i class="bi bi-plus-square"></i> @ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form id="myForm">
+            <div class="form-group py-3">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required maxlength="50">
+            </div>
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-success text-center"><i class="bi bi-check-circle px-2"></i> Create</button>
+                <a asp-controller="Category" asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-left px-2"></i> Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        // Function to populate the category dropdown using AJAX
+        function populateCategoryDropdown()
+        {
+            $.ajax({
+                url: 'http://localhost:7114/api/category', // Replace with your API endpoint URL to fetch categories
+                type: 'GET',
+                success: function (data)
+                {
+                    let options = '';
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        options += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                    }
+                    $('#category').append(options);
+                },
+                error: function ()
+                {
+                    // Handle error
+                }
+            });
+        }
+
+        // Call the populateCategoryDropdown function on page load
+        $(document).ready(function ()
+        {
+            populateCategoryDropdown();
+        });
+
+        // Handle form submission
+        $('#myForm').submit(function (e)
+        {
+            e.preventDefault();
+
+            let data = {
+                CategoryId: $('#category').val(),
+                Name: $('#name').val(),
+            };
+
+            var jsonData = JSON.stringify(data);
+
+            $.ajax({
+                url: 'http://localhost:7114/api/category/create',
+                type: 'POST',
+                dataType: 'json',
+                data: jsonData,
+                contentType: 'application/json',
+                success: function (data)
+                {
+                    window.location.href = '/Category';
+                },
+                error: function (error)
+                {
+                    alert("Something wrong happened")
+                }
+            });
+        });
+    </script>
+}

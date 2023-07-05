@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Update the Book";
+}
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2"><i class="bi bi-pencil-square"></i> @ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        <form id="myForm">
+            <input type="hidden" id="id" />
+
+            <div class="form-group py-3">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required maxlength="50">
+            </div>
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-warning text-center"><i class="bi bi-check-circle px-2"></i>Update</button> 
+                <a asp-controller="Category" asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-left px-2"></i> Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script>
+        // Function to populate the category dropdown using AJAX
+
+
+        function getCategory()
+        {
+            let path = window.location.pathname;
+            let segments = path.split('/');
+            let parameter = segments[segments.length - 1];
+
+            $.ajax({
+                url: 'http://localhost:7114/api/category/' + parameter,
+                type: 'GET',
+                success: function (data)
+                {
+                    $('#id').val(data.id);
+                    $('#name').val(data.name);
+                },
+                error: function ()
+                {
+                    // Handle error
+                }
+            });
+        }
+
+        // Call the populateCategoryDropdown function on page load
+        $(document).ready(function ()
+        {
+            getCategory()
+        });
+
+        // Handle form submission
+        $('#myForm').submit(function (e)
+        {
+            e.preventDefault();
+
+            let data = {
+                Id: $('#id').val(),
+                Name: $('#name').val(),
+            };
+
+            let jsonData = JSON.stringify(data);
+
+            $.ajax({
+                url: `http://localhost:7114/api/category/Update/${data.Id}`,
+                type: 'PUT',
+                data: jsonData,
+                contentType: 'application/json',
+                success: function (response)
+                {
+                    window.location.href = '/category';
+                },
+                error: function (error)
+                {
+                    debugger;
+                    alert("Something wrong happened")
+                }
+            });
+        });
+    </script>
+}

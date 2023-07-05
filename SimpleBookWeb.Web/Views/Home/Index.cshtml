@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "List of Books";
+}
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2"><i class="bi bi-book-fill"></i> @ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="px-3">
+        <div class="row col-md-2 px-3 py-3">
+            <a class="btn btn-success text-right" href="home/create"><i class="bi bi-plus-square px-1"></i> New Book</a>
+        </div>
+        <table id="book-table" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Registration date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+    @section scripts {
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <script>
+
+            $(document).ready(function ()
+            {
+                $.ajax({
+                    url: "http://localhost:7114/api/book",
+                    method: "GET",
+                    contentType: 'application/json'
+                }).done(function (data)
+                {
+                    table = $('#book-table').dataTable({
+                        "aaData": data,
+                        "columns": [
+                            { "data": "id" },
+                            { "data": "name" },
+                            { "data": "categoryName" },
+                            { "data": "author" },
+                            { "data": "description" },
+                            { "data": "registration" },
+
+                            {
+                                'data': null, title: 'Action', wrap: true, "render": function (item)
+                                {
+                                    return '<div class="btn-group"> <a href="home/update/' + item.id + '" value="0" class="btn btn-warning" data-toggle="modal" data-target="#myModal"><i class="bi bi-pencil-square"></i></a></div>&nbsp; <div class="btn-group" > <a href="home/delete/' + item.id + '" value = "0" class="btn btn-danger" data - toggle="modal" data - target="#myModal" > <i class="bi bi-trash3-fill"></i></a > </div>'
+                                }
+                            },
+                        ]
+                    })
+                })
+            });
+
+
+
+        </script>
+
+    }
