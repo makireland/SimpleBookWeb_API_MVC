@@ -12,8 +12,8 @@ using SimpleBookWeb.Infra.Context;
 namespace SimpleBookWeb.Infra.Migrations
 {
     [DbContext(typeof(BookDbContext))]
-    [Migration("20230627220942_initial")]
-    partial class initial
+    [Migration("20240109135130_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
