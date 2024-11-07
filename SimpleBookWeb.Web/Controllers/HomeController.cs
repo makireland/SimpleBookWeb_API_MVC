@@ -11,6 +11,7 @@ namespace SimpleBookWeb.Web.Controllers
             return View();
         }
 
+        //test
         public IActionResult Create()
         {
             return View();
